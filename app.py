@@ -21,7 +21,7 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "assistant", "content": "Write a model name to gain knowledge today?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "How may I assist you today?"}]
 st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
 # Function for generating Scikit Learn model response.
@@ -31,13 +31,15 @@ def get_sklearn_docs(estimator_name):
             if hasattr(estimator_class, "__doc__"):
                 return estimator_class.__doc__
     return False
+
 def get_output(estimator_name):
   content=str(get_sklearn_docs(estimator_name))
-    if content=="False":
-        return "Invlid model Name 🤦‍♂️ Go to slidebar for models name in ScikitLearn."
-  matches = re.search(r'Examples\s+(-+\s+.*?)\n\s*(?:[A-Z]|$)', content, re.DOTALL)
-  examples_content = matches.group(1)
-  return examples_content.strip()
+  if content=="False":
+      return "Invlid model Name 🤦‍♂️ Go to slidebar for models name in ScikitLearn."
+  else:
+      matches = re.search(r'Examples\s+(-+\s+.*?)\n\s*(?:[A-Z]|$)', content, re.DOTALL)
+      examples_content = matches.group(1)
+      return examples_content.strip()
 
 # User-provided prompt
 if prompt := st.chat_input():
